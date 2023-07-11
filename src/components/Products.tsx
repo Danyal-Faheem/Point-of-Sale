@@ -48,6 +48,14 @@ export const Products = () => {
         .then((response) => {
           setProducts(response.data);
           setCopyProducts(response.data);
+          const newProducts = JSON.parse(localStorage.getItem("product") || '{}')
+          if (Object.keys(newProducts).length != 0) {
+            response.data.push(newProducts)
+          }
+          else{
+           
+          }
+          
         })
         .catch((error) => {
           console.log(error);

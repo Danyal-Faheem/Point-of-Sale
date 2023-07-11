@@ -48,6 +48,15 @@ export const AddProduct = () => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const formDataObj = Object.fromEntries(formData.entries());
+    formDataObj.image = formDataObj.image.name;
+    formDataObj["id"] = 21;
+    formDataObj["rating"] = {
+        rate: 4.5,
+        count: 89
+    };
+
+    localStorage.setItem("product", JSON.stringify(formDataObj));
+    
     await axios
       .post("https://fakestoreapi.com/products", formDataObj)
       .then((response) => {
