@@ -11,6 +11,7 @@ import { ProductQuickView } from "./ProductQuickView";
 import { ToastContainer, toast } from "react-toastify";
 import { Product } from "./Product";
 import { EditProduct } from "./EditProduct";
+import { useLocation } from "react-router-dom";
 
 // Our main interface to fetch the products from the API
 export interface product {
@@ -33,6 +34,7 @@ export const Products = () => {
   const [products, setProducts] = useState<product[]>([]);
   const [quickViewProduct, setQuickViewProduct] = useState<product>();
   const [editProduct, setEditProduct] = useState<product>();
+  const {state} = useLocation();
   const [quickViewToggle, setQuickViewToggle] = useState<boolean | undefined>(
     false
   );
@@ -46,15 +48,13 @@ export const Products = () => {
       await axios
         .get<product[]>(`https://fakestoreapi.com/products`)
         .then((response) => {
-          setProducts(response.data);
-          setCopyProducts(response.data);
-          const newProducts = JSON.parse(localStorage.getItem("product") || '{}')
-          if (Object.keys(newProducts).length != 0) {
-            response.data.push(newProducts)
+          let responseData = response.data;
+          if (state !== null) {
+            responseData.unshift(state)
+            // console.log(state)
           }
-          else{
-           
-          }
+          setProducts(responseData);
+          setCopyProducts(responseData);
           
         })
         .catch((error) => {

@@ -3,6 +3,7 @@ import { Button, Container, Form } from "react-bootstrap";
 import { debounce } from "lodash";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface formData {
   title: string;
@@ -15,6 +16,7 @@ interface formData {
 export const AddProduct = () => {
   const [isPriceValid, setIsPriceValid] = useState<boolean>(false);
   const [isImageValid, setIsImageValid] = useState<boolean>(false);
+  const navigate = useNavigate();
 //   const [submitFormData, setSumbitFormData] = useState<formData>();
   const validatePrice = debounce((event: ChangeEvent<HTMLInputElement>) => {
     const price: number = Number(event.target.value);
@@ -51,8 +53,8 @@ export const AddProduct = () => {
     formDataObj.image = formDataObj.image.name;
     formDataObj["id"] = 21;
     formDataObj["rating"] = {
-        rate: 4.5,
-        count: 89
+        rate: (Math.random() * (4.9 - 1.0) + 1.0).toFixed(1),
+        count: Math.floor(Math.random() * 100) + 1
     };
 
     localStorage.setItem("product", JSON.stringify(formDataObj));
@@ -64,6 +66,9 @@ export const AddProduct = () => {
         toast.success("Product Successfully Added!",  {
             position: toast.POSITION.TOP_LEFT,
           });
+        navigate('/products',{
+            state: formDataObj
+        })
       })
       .catch((error) => {
         console.log(error);
